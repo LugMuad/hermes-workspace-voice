@@ -1,3 +1,91 @@
+## Included upstream fixes
+
+The `hermes-fixed` branch includes the following fixes from pending upstream pull requests:
+
+* **PR #758** — Dashboard authentication support.
+* **PR #735** — MCP server list handling via `/api/mcp/servers`.
+
+It also includes the configurable STT/TTS support and chunked TTS playback changes from this fork.
+
+## Docker installation
+
+Clone the repository and switch to the `hermes-fixed` branch:
+
+```bash
+git clone https://github.com/LugMuad/hermes-workspace-voice.git
+cd hermes-workspace-voice
+git checkout hermes-fixed
+```
+
+Build the Docker image:
+
+```bash
+docker build -t hermes-workspace-voice:latest .
+```
+
+Create or adapt your `docker-compose.yml`:
+
+```yaml
+services:
+  hermes-workspace:
+    image: hermes-workspace-voice:latest
+    container_name: hermes-workspace
+    restart: unless-stopped
+
+    environment:
+      HERMES_API_URL: http://HERMES_AGENT_IP:8642
+      HERMES_DASHBOARD_URL: http://HERMES_AGENT_IP:9119
+      HERMES_API_TOKEN: YOUR_HERMES_API_TOKEN
+
+      HERMES_PASSWORD: "CHANGE_ME"
+
+      HERMES_DASHBOARD_BASIC_AUTH_USERNAME: "admin"
+      HERMES_DASHBOARD_BASIC_AUTH_PASSWORD: "CHANGE_ME"
+
+      HERMES_UID: 1000
+      HERMES_GID: 1000
+
+      COOKIE_SECURE: "1"
+      TRUST_PROXY: "1"
+
+      VOICE_TOOLS_OPENAI_KEY: YOUR_OPENAI_COMPATIBLE_API_KEY
+
+    volumes:
+      - ./hermes-workspace-data:/home/workspace/.hermes
+      - ./workspace:/workspace
+
+    ports:
+      - "3000:3000"
+```
+
+Start Hermes Workspace:
+
+```bash
+docker compose up -d
+```
+
+> `COOKIE_SECURE=1` and `TRUST_PROXY=1` should be enabled when Hermes Workspace is exposed over HTTPS behind a reverse proxy.
+
+## Voice configuration
+
+STT and TTS can be configured directly from the Hermes Workspace settings interface.
+
+For OpenAI-compatible backends, the following options are available:
+
+* STT model
+* STT base URL
+* STT language
+* TTS model
+* TTS voice
+* TTS base URL
+* TTS chunk size
+* Consent attestation when required by the TTS backend
+
+TTS playback uses paragraph- and sentence-aware chunking to reduce initial playback latency while preserving natural speech boundaries. The next chunk is prefetched while the current one is playing.
+
+Workspace-specific voice settings, such as the TTS chunk size, are stored separately from the Hermes Agent configuration.
+
+
 <div align="center">
 
 <img src="./public/claude-avatar.webp" alt="Hermes Workspace" width="80" style="border-radius: 16px" />
