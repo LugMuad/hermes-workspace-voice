@@ -22,7 +22,6 @@ import type { McpServerInput } from '../../types/mcp-input'
 import { parseMcpServerInput } from '../../server/mcp-input-validate'
 import { createCapabilityUnavailablePayload } from '@/lib/feature-gates'
 import { getProbe } from '../../server/mcp-tools-cache'
-import { fetchMcpList } from '../../server/mcp-upstream'
 
 const KNOWN_CATEGORIES = ['All', 'Connected', 'Failed', 'Disabled'] as const
 const REQUEST_TIMEOUT_MS = 30_000
@@ -124,9 +123,9 @@ export const Route = createFileRoute('/api/mcp')({
 
           let servers: ReturnType<typeof normalizeMcpList>
           if (capabilities.mcp) {
-            const response = await fetchMcpList((path) =>
-              mcpFetch(path, { signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) }),
-            )
+            const response = await mcpFetch('/api/mcp', {
+              signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+            })
             if (!response.ok) {
               return json(
                 {
