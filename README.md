@@ -3,7 +3,7 @@
 The `hermes-fixed` branch includes the following fixes from pending upstream pull requests:
 
 * **PR #758** — Dashboard authentication support.
-* **PR #735** — MCP server list handling via `/api/mcp/servers`.
+* **PR #759** — MCP server API fixes using the correct `/api/mcp/servers` endpoints for capability detection, listing, creation, and deletion.
 
 It also includes the configurable STT/TTS support and chunked TTS playback changes from this fork.
 
