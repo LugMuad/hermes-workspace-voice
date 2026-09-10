@@ -1,11 +1,48 @@
-## Included upstream fixes
+## Included fixes and features
 
 The `hermes-fixed` branch includes the following fixes from pending upstream pull requests:
 
 * **PR #758** — Dashboard authentication support.
 * **PR #759** — MCP server API fixes using the correct `/api/mcp/servers` endpoints for capability detection, listing, creation, and deletion.
 
-It also includes the configurable STT/TTS support and chunked TTS playback changes from this fork.
+It also includes additional fixes specific to this fork:
+
+### MCP support
+
+* Updated MCP server testing to use the current Hermes Agent API:
+  `/api/mcp/servers/{name}/test`.
+* MCP test results now report discovered tools correctly in Workspace.
+* Added Workspace-side latency measurement for MCP connection tests.
+* Updated MCP enable/disable support to use:
+  `/api/mcp/servers/{name}/enabled`.
+* Removed the obsolete MCP `Discover` endpoint and UI action, since current
+  Hermes Agent performs tool discovery when testing an installed server.
+* Fixed the Docker image so the bundled MCP preset seed is actually available
+  at runtime.
+* Fixed the Smithery MCP marketplace integration:
+  * remote Smithery servers are recognized as HTTP MCP servers;
+  * Smithery search queries are performed server-side;
+  * deployed remote servers are filtered correctly;
+  * up to 100 results can be retrieved per request;
+  * search results use query-specific caching.
+
+### Skills Hub support
+
+The Docker image now includes everything required for the Hermes Skills Hub:
+
+* `skills-search.py`
+* Hermes Agent Skills Hub modules
+* `python3-httpx`
+* `python3-yaml`
+* the required Python module path configuration
+
+No manual Hermes Agent bind mount or Python dependency installation is required
+for Skills search when using the image built from this branch.
+
+### Voice support
+
+This branch also includes the configurable STT/TTS support and chunked TTS
+playback changes from this fork.
 
 ## Docker installation
 
@@ -22,6 +59,9 @@ Build the Docker image:
 ```bash
 docker build -t hermes-workspace-voice:latest .
 ```
+
+> The Docker build retrieves the Hermes Agent sources required by the Skills
+> Hub, so network access to GitHub is required during the build.
 
 Create or adapt your `docker-compose.yml`:
 
@@ -64,11 +104,24 @@ Start Hermes Workspace:
 docker compose up -d
 ```
 
-> `COOKIE_SECURE=1` and `TRUST_PROXY=1` should be enabled when Hermes Workspace is exposed over HTTPS behind a reverse proxy.
+> `COOKIE_SECURE=1` and `TRUST_PROXY=1` should be enabled when Hermes Workspace
+> is exposed over HTTPS behind a reverse proxy.
+
+## MCP and Skills
+
+When using the Docker image built from `hermes-fixed`:
+
+* the Skills Hub works without additional host mounts;
+* the bundled MCP presets are available;
+* the Smithery MCP marketplace can be searched directly from Workspace;
+* MCP servers can be tested from Workspace;
+* discovered tool counts and test latency are displayed;
+* MCP servers can be enabled and disabled using the current Hermes Agent API.
 
 ## Voice configuration
 
-STT and TTS can be configured directly from the Hermes Workspace settings interface.
+STT and TTS can be configured directly from the Hermes Workspace settings
+interface.
 
 For OpenAI-compatible backends, the following options are available:
 
@@ -81,9 +134,12 @@ For OpenAI-compatible backends, the following options are available:
 * TTS chunk size
 * Consent attestation when required by the TTS backend
 
-TTS playback uses paragraph- and sentence-aware chunking to reduce initial playback latency while preserving natural speech boundaries. The next chunk is prefetched while the current one is playing.
+TTS playback uses paragraph- and sentence-aware chunking to reduce initial
+playback latency while preserving natural speech boundaries. The next chunk is
+prefetched while the current one is playing.
 
-Workspace-specific voice settings, such as the TTS chunk size, are stored separately from the Hermes Agent configuration.
+Workspace-specific voice settings, such as the TTS chunk size, are stored
+separately from the Hermes Agent configuration.
 
 
 <div align="center">
