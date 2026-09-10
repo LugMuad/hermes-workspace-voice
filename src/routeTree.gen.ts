@@ -38,6 +38,7 @@ import { Route as ChatIndexRouteImport } from './routes/chat/index'
 import { Route as SettingsProvidersRouteImport } from './routes/settings/providers'
 import { Route as ReserveConfirmRouteImport } from './routes/reserve/confirm'
 import { Route as ChatSessionKeyRouteImport } from './routes/chat/$sessionKey'
+import { Route as ApiWorkspaceVoiceSettingsRouteImport } from './routes/api/workspace-voice-settings'
 import { Route as ApiWorkspaceRouteImport } from './routes/api/workspace'
 import { Route as ApiVtCapitalRouteImport } from './routes/api/vt-capital'
 import { Route as ApiTranscribeRouteImport } from './routes/api/transcribe'
@@ -67,6 +68,7 @@ import { Route as ApiSwarmCheckpointRouteImport } from './routes/api/swarm-check
 import { Route as ApiSwarmChatRouteImport } from './routes/api/swarm-chat'
 import { Route as ApiStartClaudeRouteImport } from './routes/api/start-claude'
 import { Route as ApiStartAgentRouteImport } from './routes/api/start-agent'
+import { Route as ApiSpeechRouteImport } from './routes/api/speech'
 import { Route as ApiSkillsRouteImport } from './routes/api/skills'
 import { Route as ApiSessionsRouteImport } from './routes/api/sessions'
 import { Route as ApiSessionStatusRouteImport } from './routes/api/session-status'
@@ -320,6 +322,12 @@ const ChatSessionKeyRoute = ChatSessionKeyRouteImport.update({
   path: '/chat/$sessionKey',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiWorkspaceVoiceSettingsRoute =
+  ApiWorkspaceVoiceSettingsRouteImport.update({
+    id: '/api/workspace-voice-settings',
+    path: '/api/workspace-voice-settings',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiWorkspaceRoute = ApiWorkspaceRouteImport.update({
   id: '/api/workspace',
   path: '/api/workspace',
@@ -464,6 +472,11 @@ const ApiStartClaudeRoute = ApiStartClaudeRouteImport.update({
 const ApiStartAgentRoute = ApiStartAgentRouteImport.update({
   id: '/api/start-agent',
   path: '/api/start-agent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSpeechRoute = ApiSpeechRouteImport.update({
+  id: '/api/speech',
+  path: '/api/speech',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSkillsRoute = ApiSkillsRouteImport.update({
@@ -1085,6 +1098,7 @@ export interface FileRoutesByFullPath {
   '/api/session-status': typeof ApiSessionStatusRoute
   '/api/sessions': typeof ApiSessionsRouteWithChildren
   '/api/skills': typeof ApiSkillsRouteWithChildren
+  '/api/speech': typeof ApiSpeechRoute
   '/api/start-agent': typeof ApiStartAgentRoute
   '/api/start-claude': typeof ApiStartClaudeRoute
   '/api/swarm-chat': typeof ApiSwarmChatRoute
@@ -1114,6 +1128,7 @@ export interface FileRoutesByFullPath {
   '/api/transcribe': typeof ApiTranscribeRoute
   '/api/vt-capital': typeof ApiVtCapitalRoute
   '/api/workspace': typeof ApiWorkspaceRoute
+  '/api/workspace-voice-settings': typeof ApiWorkspaceVoiceSettingsRoute
   '/chat/$sessionKey': typeof ChatSessionKeyRoute
   '/reserve/confirm': typeof ReserveConfirmRoute
   '/settings/providers': typeof SettingsProvidersRoute
@@ -1251,6 +1266,7 @@ export interface FileRoutesByTo {
   '/api/session-status': typeof ApiSessionStatusRoute
   '/api/sessions': typeof ApiSessionsRouteWithChildren
   '/api/skills': typeof ApiSkillsRouteWithChildren
+  '/api/speech': typeof ApiSpeechRoute
   '/api/start-agent': typeof ApiStartAgentRoute
   '/api/start-claude': typeof ApiStartClaudeRoute
   '/api/swarm-chat': typeof ApiSwarmChatRoute
@@ -1280,6 +1296,7 @@ export interface FileRoutesByTo {
   '/api/transcribe': typeof ApiTranscribeRoute
   '/api/vt-capital': typeof ApiVtCapitalRoute
   '/api/workspace': typeof ApiWorkspaceRoute
+  '/api/workspace-voice-settings': typeof ApiWorkspaceVoiceSettingsRoute
   '/chat/$sessionKey': typeof ChatSessionKeyRoute
   '/reserve/confirm': typeof ReserveConfirmRoute
   '/settings/providers': typeof SettingsProvidersRoute
@@ -1419,6 +1436,7 @@ export interface FileRoutesById {
   '/api/session-status': typeof ApiSessionStatusRoute
   '/api/sessions': typeof ApiSessionsRouteWithChildren
   '/api/skills': typeof ApiSkillsRouteWithChildren
+  '/api/speech': typeof ApiSpeechRoute
   '/api/start-agent': typeof ApiStartAgentRoute
   '/api/start-claude': typeof ApiStartClaudeRoute
   '/api/swarm-chat': typeof ApiSwarmChatRoute
@@ -1448,6 +1466,7 @@ export interface FileRoutesById {
   '/api/transcribe': typeof ApiTranscribeRoute
   '/api/vt-capital': typeof ApiVtCapitalRoute
   '/api/workspace': typeof ApiWorkspaceRoute
+  '/api/workspace-voice-settings': typeof ApiWorkspaceVoiceSettingsRoute
   '/chat/$sessionKey': typeof ChatSessionKeyRoute
   '/reserve/confirm': typeof ReserveConfirmRoute
   '/settings/providers': typeof SettingsProvidersRoute
@@ -1588,6 +1607,7 @@ export interface FileRouteTypes {
     | '/api/session-status'
     | '/api/sessions'
     | '/api/skills'
+    | '/api/speech'
     | '/api/start-agent'
     | '/api/start-claude'
     | '/api/swarm-chat'
@@ -1617,6 +1637,7 @@ export interface FileRouteTypes {
     | '/api/transcribe'
     | '/api/vt-capital'
     | '/api/workspace'
+    | '/api/workspace-voice-settings'
     | '/chat/$sessionKey'
     | '/reserve/confirm'
     | '/settings/providers'
@@ -1754,6 +1775,7 @@ export interface FileRouteTypes {
     | '/api/session-status'
     | '/api/sessions'
     | '/api/skills'
+    | '/api/speech'
     | '/api/start-agent'
     | '/api/start-claude'
     | '/api/swarm-chat'
@@ -1783,6 +1805,7 @@ export interface FileRouteTypes {
     | '/api/transcribe'
     | '/api/vt-capital'
     | '/api/workspace'
+    | '/api/workspace-voice-settings'
     | '/chat/$sessionKey'
     | '/reserve/confirm'
     | '/settings/providers'
@@ -1921,6 +1944,7 @@ export interface FileRouteTypes {
     | '/api/session-status'
     | '/api/sessions'
     | '/api/skills'
+    | '/api/speech'
     | '/api/start-agent'
     | '/api/start-claude'
     | '/api/swarm-chat'
@@ -1950,6 +1974,7 @@ export interface FileRouteTypes {
     | '/api/transcribe'
     | '/api/vt-capital'
     | '/api/workspace'
+    | '/api/workspace-voice-settings'
     | '/chat/$sessionKey'
     | '/reserve/confirm'
     | '/settings/providers'
@@ -2089,6 +2114,7 @@ export interface RootRouteChildren {
   ApiSessionStatusRoute: typeof ApiSessionStatusRoute
   ApiSessionsRoute: typeof ApiSessionsRouteWithChildren
   ApiSkillsRoute: typeof ApiSkillsRouteWithChildren
+  ApiSpeechRoute: typeof ApiSpeechRoute
   ApiStartAgentRoute: typeof ApiStartAgentRoute
   ApiStartClaudeRoute: typeof ApiStartClaudeRoute
   ApiSwarmChatRoute: typeof ApiSwarmChatRoute
@@ -2118,6 +2144,7 @@ export interface RootRouteChildren {
   ApiTranscribeRoute: typeof ApiTranscribeRoute
   ApiVtCapitalRoute: typeof ApiVtCapitalRoute
   ApiWorkspaceRoute: typeof ApiWorkspaceRoute
+  ApiWorkspaceVoiceSettingsRoute: typeof ApiWorkspaceVoiceSettingsRoute
   ChatSessionKeyRoute: typeof ChatSessionKeyRoute
   ChatIndexRoute: typeof ChatIndexRoute
   ApiClaudeProxySplatRoute: typeof ApiClaudeProxySplatRoute
@@ -2358,6 +2385,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChatSessionKeyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/workspace-voice-settings': {
+      id: '/api/workspace-voice-settings'
+      path: '/api/workspace-voice-settings'
+      fullPath: '/api/workspace-voice-settings'
+      preLoaderRoute: typeof ApiWorkspaceVoiceSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/workspace': {
       id: '/api/workspace'
       path: '/api/workspace'
@@ -2559,6 +2593,13 @@ declare module '@tanstack/react-router' {
       path: '/api/start-agent'
       fullPath: '/api/start-agent'
       preLoaderRoute: typeof ApiStartAgentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/speech': {
+      id: '/api/speech'
+      path: '/api/speech'
+      fullPath: '/api/speech'
+      preLoaderRoute: typeof ApiSpeechRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/skills': {
@@ -3625,6 +3666,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiSessionStatusRoute: ApiSessionStatusRoute,
   ApiSessionsRoute: ApiSessionsRouteWithChildren,
   ApiSkillsRoute: ApiSkillsRouteWithChildren,
+  ApiSpeechRoute: ApiSpeechRoute,
   ApiStartAgentRoute: ApiStartAgentRoute,
   ApiStartClaudeRoute: ApiStartClaudeRoute,
   ApiSwarmChatRoute: ApiSwarmChatRoute,
@@ -3654,6 +3696,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiTranscribeRoute: ApiTranscribeRoute,
   ApiVtCapitalRoute: ApiVtCapitalRoute,
   ApiWorkspaceRoute: ApiWorkspaceRoute,
+  ApiWorkspaceVoiceSettingsRoute: ApiWorkspaceVoiceSettingsRoute,
   ChatSessionKeyRoute: ChatSessionKeyRoute,
   ChatIndexRoute: ChatIndexRoute,
   ApiClaudeProxySplatRoute: ApiClaudeProxySplatRoute,
