@@ -101,7 +101,7 @@ export function McpServerDialog({ open, initial, onClose }: Props) {
     setDraft((prev) => ({ ...prev, ...patch }))
 
   const fallbackMode = capabilityMode === 'fallback'
-  
+
   return (
     <DialogRoot
       open={open}

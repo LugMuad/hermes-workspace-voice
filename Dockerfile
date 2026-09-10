@@ -37,7 +37,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY scripts/skills-search.py /app/scripts/skills-search.py
 
-RUN curl -L \
+RUN curl -fL \
       https://codeload.github.com/NousResearch/hermes-agent/tar.gz/refs/heads/main \
       -o /tmp/hermes-agent.tar.gz \
     && mkdir -p /hermes-agent \
