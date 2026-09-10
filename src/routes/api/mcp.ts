@@ -136,7 +136,22 @@ export const Route = createFileRoute('/api/mcp')({
               )
             }
             const body = (await response.json().catch(() => null)) as unknown
-            servers = normalizeMcpList(body).map((s) => maskSecretsInPlace(s))
+            servers = normalizeMcpList(body)
+              .map((s) => maskSecretsInPlace(s))
+              .map((s) => {
+                const probe = getProbe(s.name)
+
+                if (!probe) return s
+
+                return {
+                  ...s,
+                  status: probe.status,
+                  discoveredToolsCount: probe.toolCount,
+                  discoveredTools: probe.toolNames.map((name) => ({ name })),
+                  lastTestedAt: new Date(probe.testedAt).toISOString(),
+                  lastError: probe.error || s.lastError,
+                }
+              })
           } else {
             // Phase 1.5 fallback — read config.mcp_servers, then hydrate
             // status + discoveredToolsCount from the in-memory probe cache
