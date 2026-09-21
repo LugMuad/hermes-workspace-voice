@@ -26,7 +26,7 @@
  */
 import {
   CLAUDE_DASHBOARD_URL,
-  fetchDashboardToken,
+  dashboardAuthHeaders,
 } from './gateway-capabilities'
 
 const PROXY_TIMEOUT_MS = 10_000
@@ -64,11 +64,10 @@ async function buildHeaders(): Promise<Record<string, string>> {
     'Content-Type': 'application/json',
   }
   try {
-    const token = await fetchDashboardToken()
-    if (token) headers.Authorization = `Bearer ${token}`
+    Object.assign(headers, await dashboardAuthHeaders())
   } catch {
-    // Token fetch is best-effort. The plugin route works without it
-    // on standard loopback installs.
+    // Dashboard auth is best-effort. The request will surface the
+    // dashboard's actual HTTP error if authentication is unavailable.
   }
   return headers
 }
